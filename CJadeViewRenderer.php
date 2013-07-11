@@ -22,7 +22,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-Yii::setPathOfAlias('Jade', Yii::getPathOfAlias('ext.yii-jade.vendors.jade.src.Jade'));
+Yii::setPathOfAlias('Jade', dirname(__FILE__).'/vendors/jade/src/Jade');
 
 class CJadeViewRenderer extends CViewRenderer
 {
