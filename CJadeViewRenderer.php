@@ -53,6 +53,11 @@ class CJadeViewRenderer extends CViewRenderer
   public $viewFileExtension = '.php';
 
   /**
+   * @var string the string to be written before the compiled template. Can be set in main.php. E.g. 'prepend' => array('<?php extract((array)$data); ?>')
+   */
+  public $prepend;
+
+  /**
    * Init a Jade parser instance
    */
   public function init() {
@@ -75,7 +80,7 @@ class CJadeViewRenderer extends CViewRenderer
     } else {
       $data = file_get_contents($sourceFile);
     }
-    file_put_contents($viewFile, $data);
+    file_put_contents($viewFile, $this->prepend[0] . $data);
   }
 
   /**
