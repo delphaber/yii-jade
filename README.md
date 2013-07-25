@@ -22,5 +22,10 @@ Yii's extension for Jade template system
         ),
         ...
     ```
+* You may want to add the following line, so the compiled templates will have passed data to a template in the main var list
+
+   ```php
+            'prepend' => array('<?php extract((array)$data); ?>'),
+   ```
 
 * Jade templates must have '.jade' extension
