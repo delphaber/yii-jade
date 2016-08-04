@@ -1,3 +1,0 @@
-[submodule "vendors/jade"]
-	path = vendors/jade
-	url = git@github.com:sisoftrg/jade.php.git

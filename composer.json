@@ -1,0 +1,9 @@
+{
+	"name": "greenhost/yii-jade",
+	"description": "Fork of Yii's extension for Jade template system",
+	"license" : "New BSD License",
+	"homepage": "https://github.com/greenhost/yii-jade",
+	"require": {
+		"talesoft/tale-jade": "^1.4"
+	}
+}

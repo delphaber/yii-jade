@@ -22,7 +22,8 @@
  * @license http://www.yiiframework.com/license/
  */
 
-Yii::setPathOfAlias('Jade', dirname(__FILE__).'/vendors/jade/src/Jade');
+use Tale\Jade;
+include(dirname(__FILE__) . '/vendor/autoload');
 
 class CJadeViewRenderer extends CViewRenderer
 {
@@ -62,7 +63,7 @@ class CJadeViewRenderer extends CViewRenderer
    */
   public function init() {
     parent::init();
-    $this->jade = new Jade\Jade();
+    $this->jade = new Jade\Renderer();
   }
 
   /**
