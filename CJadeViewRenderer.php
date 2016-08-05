@@ -23,7 +23,6 @@
  */
 
 use Tale\Jade;
-include(dirname(__FILE__) . '/vendor/autoload');
 
 class CJadeViewRenderer extends CViewRenderer
 {
@@ -59,11 +58,17 @@ class CJadeViewRenderer extends CViewRenderer
   public $prepend;
 
   /**
+   * @var array the jade configuration for tale-jade, supplied to the 
+   * constructor of Renderer
+   */
+  public $taleJadeConfig = [];
+
+  /**
    * Init a Jade parser instance
    */
   public function init() {
     parent::init();
-    $this->jade = new Jade\Renderer();
+    $this->jade = new Jade\Compiler($this->taleJadeConfig);
   }
 
   /**
@@ -77,7 +82,7 @@ class CJadeViewRenderer extends CViewRenderer
       if ($this->jade == null)
         $this->init();
 
-      $data = $this->jade->render($sourceFile);
+      $data = $this->jade->compileFile($sourceFile);
     } else {
       $data = file_get_contents($sourceFile);
     }
