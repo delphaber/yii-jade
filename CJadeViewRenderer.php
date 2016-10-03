@@ -58,7 +58,7 @@ class CJadeViewRenderer extends CViewRenderer
   public $prepend;
 
   /**
-   * @var array the jade configuration for tale-jade, supplied to the 
+   * @var array the jade configuration for tale-jade, supplied to the
    * constructor of Renderer
    */
   public $taleJadeConfig = [];
@@ -98,22 +98,26 @@ class CJadeViewRenderer extends CViewRenderer
   // * @param boolean $return whether the rendering result should be returned
   // * @return mixed the rendering result, or null if the rendering result is not needed.
   // */
-  //public function renderFile($context,$sourceFile,$data,$return)
-  //{
-  //  $jadeSourceFile = substr($sourceFile, 0, strrpos($sourceFile, '.')).$this->fileExtension;
+  public function renderFile($context,$sourceFile,$data,$return)
+  {
+    $jadeSourceFile = substr($sourceFile, 0, strrpos($sourceFile, '.')).$this->fileExtension;
 
-  //  if(!is_file($jadeSourceFile) || ($file=realpath($jadeSourceFile))===false)
-  //    return parent::renderFile($context, $sourceFile, $data, $return);
+    if(!is_file($jadeSourceFile) || ($file=realpath($jadeSourceFile))===false)
+      return parent::renderFile($context, $sourceFile, $data, $return);
 
-  //  $viewFile = $this->getViewFile($sourceFile);
-  //  $viewFile = str_replace($this->fileExtension.($this->useRuntimePath?'':'c'), $this->viewFileExtension, $viewFile);
+    $viewFile = $this->getViewFile($sourceFile);
+    $viewFile = str_replace($this->fileExtension.($this->useRuntimePath?'':'c'), $this->viewFileExtension, $viewFile);
 
-  //  if(@filemtime($sourceFile) > @filemtime($viewFile))
-  //  {
-  //    $this->generateViewFile($sourceFile,$viewFile);
-  //    @chmod($viewFile,$this->filePermission);
-  //  }
-  //  return $context->renderInternal($viewFile,$data,$return);
-  //}
+    // Included Jade files do not cause the cache to be invalidated.
+    // By forcing a flush you can make Jade regenerate all views.
+    $forceRefresh = array_key_exists('_flush', $_GET);
+
+    if(@filemtime($sourceFile) > @filemtime($viewFile) || $forceRefresh)
+    {
+      $this->generateViewFile($sourceFile,$viewFile);
+      @chmod($viewFile,$this->filePermission);
+    }
+    return $context->renderInternal($viewFile,$data,$return);
+  }
 
 }
