@@ -58,4 +58,7 @@ yii configuration file, e.g.:
         ...
     ```
 
-sets the file permissions of all the files yii-jade creates to 775.
+sets the file permissions of all the files yii-jade creates to 775. Note that
+this is applied to the compiled templates with `chmod`, so this overrides the
+umask you set in PHP. Also note that this does *not* override any permissions of
+directories that are automatically created.
