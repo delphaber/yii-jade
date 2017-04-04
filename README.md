@@ -1,3 +1,9 @@
+Note:
+-----
+__The original Jade was renamed to Pug some time ago, Talesoft has since renamed their port of Jade: TaleJade to TalePug. This wrapper still uses TaleJade, it's still here in case someone is pulling this in with composer. But you should really use [github.com/greenhost/yii-pug](github.com/greenhost/yii-pug) instead.__
+
+
+
 Yii-jade
 ========
 Yii's extension for Jade template system
