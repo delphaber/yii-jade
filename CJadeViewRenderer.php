@@ -22,7 +22,7 @@
  * @license http://www.yiiframework.com/license/
  */
 
-Yii::setPathOfAlias('Jade', dirname(__FILE__).'/vendors/jade/src/Jade');
+use Tale\Jade;
 
 class CJadeViewRenderer extends CViewRenderer
 {
@@ -58,11 +58,17 @@ class CJadeViewRenderer extends CViewRenderer
   public $prepend;
 
   /**
+   * @var array the jade configuration for tale-jade, supplied to the
+   * constructor of Renderer
+   */
+  public $taleJadeConfig = [];
+
+  /**
    * Init a Jade parser instance
    */
   public function init() {
     parent::init();
-    $this->jade = new Jade\Jade();
+    $this->jade = new Jade\Compiler($this->taleJadeConfig);
   }
 
   /**
@@ -76,7 +82,7 @@ class CJadeViewRenderer extends CViewRenderer
       if ($this->jade == null)
         $this->init();
 
-      $data = $this->jade->render($sourceFile);
+      $data = $this->jade->compileFile($sourceFile);
     } else {
       $data = file_get_contents($sourceFile);
     }
@@ -102,12 +108,15 @@ class CJadeViewRenderer extends CViewRenderer
     $viewFile = $this->getViewFile($sourceFile);
     $viewFile = str_replace($this->fileExtension.($this->useRuntimePath?'':'c'), $this->viewFileExtension, $viewFile);
 
-    if(@filemtime($sourceFile) > @filemtime($viewFile))
+    // Included Jade files do not cause the cache to be invalidated.
+    // By forcing a flush you can make Jade regenerate all views.
+    $forceRefresh = array_key_exists('_flush', $_GET);
+
+    if(@filemtime($sourceFile) > @filemtime($viewFile) || $forceRefresh)
     {
       $this->generateViewFile($sourceFile,$viewFile);
       @chmod($viewFile,$this->filePermission);
     }
     return $context->renderInternal($viewFile,$data,$return);
   }
-
 }
